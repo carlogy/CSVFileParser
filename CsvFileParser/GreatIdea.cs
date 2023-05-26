@@ -23,6 +23,12 @@ namespace CsvFileParser
         public string? ProductArea { get; set; }
         [Name("tags")]
         public string? Tags { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"{ID},\"{Title}\",\"{Description.Replace("\n","").Replace("\"","'")}\",{Status},{TotalUpVotes}";
+        }
     }
 }
 

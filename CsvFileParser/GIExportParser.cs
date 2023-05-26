@@ -5,6 +5,7 @@ using System.IO;
 using CsvHelper.Configuration;
 using System.Linq;
 
+
 namespace CsvFileParser
 {
 
@@ -13,72 +14,85 @@ namespace CsvFileParser
     {
         public static void GIExportParse()
         {
-
+            
             Console.Write("Enter the path of the file you wish to parse: ");
             var inputPath = Console.ReadLine();
 
+            Console.Write("Enter the keywords you want to search for separated by a comma: ");
+            var keyWords = Console.ReadLine();
+
+
+            Console.Write("Path to save file: ");
+            var NewFilePath = Console.ReadLine() + "/FilteredGreatIdeas.csv";
+
+
+            var keyArr = keyWords.Split(separator: ", ");
+
+            List<GreatIdea> filteredIdeas = new List<GreatIdea>();
+
             TextReader streamReader;
-            using (streamReader = new StreamReader($@"{inputPath}"))
+            using (streamReader = new StreamReader($"{inputPath}"))
             {
                 using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
                 {
                     var records = csvReader.GetRecords<GreatIdea>().ToList();
 
-                    string[] itemsToSearch = new string[] { "portal", "portal home", "home" };
-                    List<int> filteredIds = new List<int>();
-
+                    
+                   
                     foreach (var record in records)
                     {
-                        if (record.Title.Contains(itemsToSearch[0]))
-                        {
-                            //Console.WriteLine(record.ID);
-                            filteredIds.Add(record.ID);
-                        }
-                        else if (record.Title.Contains(itemsToSearch[1]))
-                        {
-                            //Console.WriteLine(record.ID);
-                            filteredIds.Add(record.ID);
-                        }
-                        else if (record.Title.Contains(itemsToSearch[2]))
-                        {
-                            //Console.WriteLine(record.ID);
-                            filteredIds.Add(record.ID);
-                        }
-                        else if (record.Description.Contains(itemsToSearch[0]))
-                        {
-                            //Console.WriteLine(record.ID);
-                            filteredIds.Add(record.ID);
-                        }
-                        else if (record.Description.Contains(itemsToSearch[1]))
-                        {
-                            //Console.WriteLine(record.ID);
-                            filteredIds.Add(record.ID);
-                        }
-                        else if (record.Description.Contains(itemsToSearch[2]))
-                        {
-                            //Console.WriteLine(record.ID);
-                            filteredIds.Add(record.ID);
-                        }
 
-
+                        if (keyArr.Any(item => record.Title.Contains(item) || record.Description.Contains(item)))
+                       
+                        {
+                            //Console.WriteLine(record.ID);
+                            filteredIdeas.Add(record);
+                        }
+              
                     }
 
-                    //Opportunity to iterate and create a CSV with this.
-                    //Need to figure out how to 
+                   
+                     // Prints each idea that's filtered as a string   
+                    //foreach (var idea in filteredIdeas)
+                    //{
+                    //    Console.WriteLine(idea.ToString());
+                    //}
 
-                    foreach (var id in filteredIds)
-                    {
-                        Console.WriteLine(id);
-                    }
-
-                    Console.WriteLine("Total GI's: " + filteredIds.Count());
+                    Console.WriteLine("Total GI's Filtered: " + filteredIdeas.Count());
                 }
 
-                Console.ReadLine();
+
+
+                // Builds the export
+
+                var headerColumns = "GI_ID, Title, Description, Status, Upvotes";
+                List<string> IdeaExport = new List<string>();
+
+                IdeaExport.Add(headerColumns);
+                
+
+                foreach (var ideaLine in filteredIdeas)
+                {
+                   
+                    IdeaExport.Add(ideaLine.ToString());
+                }
+
+                // writeAll lines to file, creates file, saves the file in path
+
+                File.AppendAllLines(NewFilePath, IdeaExport);
+
+
+                // confirmation file saved  in path
+
+                Console.WriteLine($"Filtered ideas saved to {NewFilePath}");
+
+               Console.ReadLine();
 
 
             }
         }
+
+       
     }
 }		 
 

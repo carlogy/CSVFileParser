@@ -14,9 +14,11 @@ namespace CsvFileParser
         static void Main(string[] args)
         {
             GIExportParser.GIExportParse();
+            
         }
     }
 }
+
 
 
 
