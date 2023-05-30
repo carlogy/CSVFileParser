@@ -27,7 +27,7 @@ namespace CsvFileParser
 
         public override string ToString()
         {
-            return $"{ID},\"{Title}\",\"{Description.Replace("\n","").Replace("\"","'")}\",{Status},{TotalUpVotes}";
+            return $"{ID},\"{Title}\",\"{Description.Replace("\n","").Replace("\"","'")}\",{Status},{TotalUpVotes},{Tags.Replace(",", ";")}";
         }
     }
 }

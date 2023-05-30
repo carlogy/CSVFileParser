@@ -65,7 +65,7 @@ namespace CsvFileParser
 
                 // Builds the export
 
-                var headerColumns = "GI_ID, Title, Description, Status, Upvotes";
+                var headerColumns = "GI_ID, Title, Description, Status, Upvotes, Tags";
                 List<string> IdeaExport = new List<string>();
 
                 IdeaExport.Add(headerColumns);
